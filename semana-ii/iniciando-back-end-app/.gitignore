@@ -5,3 +5,4 @@ dist/
 dist/*
 
 ormconfig.json
+notes.md
