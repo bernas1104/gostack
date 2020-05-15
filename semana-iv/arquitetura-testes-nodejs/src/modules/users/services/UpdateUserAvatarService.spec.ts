@@ -6,16 +6,23 @@ import AppError from '@shared/errors/AppError';
 
 import UpdateUserAvatarService from './UpdateUserAvatarService';
 
-describe('UpdateAvatar', () => {
-  it("should create the user's avatar", async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeStorageProvider = new FakeStorageProvider();
+let fakeUsersRepository: FakeUsersRepository;
+let fakeStorageProvider: FakeStorageProvider;
 
-    const updateUserAvatarService = new UpdateUserAvatarService(
+let updateUserAvatarService: UpdateUserAvatarService;
+
+describe('UpdateAvatar', () => {
+  beforeEach(() => {
+    fakeUsersRepository = new FakeUsersRepository();
+    fakeStorageProvider = new FakeStorageProvider();
+
+    updateUserAvatarService = new UpdateUserAvatarService(
       fakeUsersRepository,
       fakeStorageProvider,
     );
+  });
 
+  it("should create the user's avatar", async () => {
     const user = await fakeUsersRepository.create({
       name: 'John Doe',
       email: 'johndoe@gmail.com',
@@ -32,15 +39,7 @@ describe('UpdateAvatar', () => {
   });
 
   it("should update the user's avatar", async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeStorageProvider = new FakeStorageProvider();
-
     const deleteFile = jest.spyOn(fakeStorageProvider, 'deleteFile');
-
-    const updateUserAvatarService = new UpdateUserAvatarService(
-      fakeUsersRepository,
-      fakeStorageProvider,
-    );
 
     let user = await fakeUsersRepository.create({
       name: 'John Doe',
@@ -64,15 +63,7 @@ describe('UpdateAvatar', () => {
   });
 
   it("should not update user's avatar, if user does not exist", async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeStorageProvider = new FakeStorageProvider();
-
-    const updateUserAvatarService = new UpdateUserAvatarService(
-      fakeUsersRepository,
-      fakeStorageProvider,
-    );
-
-    expect(
+    await expect(
       updateUserAvatarService.execute({
         user_id: '123456',
         avatarFilename: 'new_avatar.jpg',

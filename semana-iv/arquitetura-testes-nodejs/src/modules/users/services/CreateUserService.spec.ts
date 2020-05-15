@@ -6,16 +6,23 @@ import AppError from '@shared/errors/AppError';
 
 import CreateUserService from './CreateUserService';
 
-describe('CreateUser', () => {
-  it('should create a new user', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeHashProvider = new FakeHashProvider();
+let fakeUsersRepository: FakeUsersRepository;
+let fakeHashProvider: FakeHashProvider;
 
-    const createUserService = new CreateUserService(
+let createUserService: CreateUserService;
+
+describe('CreateUser', () => {
+  beforeEach(() => {
+    fakeUsersRepository = new FakeUsersRepository();
+    fakeHashProvider = new FakeHashProvider();
+
+    createUserService = new CreateUserService(
       fakeUsersRepository,
       fakeHashProvider,
     );
+  });
 
+  it('should create a new user', async () => {
     const user = await createUserService.execute({
       name: 'Bernardo',
       email: 'bernardoc1104@gmail.com',
@@ -26,21 +33,13 @@ describe('CreateUser', () => {
   });
 
   it('should not create a new user if email is already taken', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeHashProvider = new FakeHashProvider();
-
-    const createUserService = new CreateUserService(
-      fakeUsersRepository,
-      fakeHashProvider,
-    );
-
     await createUserService.execute({
       name: 'John Doe',
       email: 'johndoe@gmail.com',
       password: '123456',
     });
 
-    expect(
+    await expect(
       createUserService.execute({
         name: 'John Doe',
         email: 'johndoe@gmail.com',
