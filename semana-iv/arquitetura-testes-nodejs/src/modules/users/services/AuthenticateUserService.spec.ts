@@ -1,4 +1,5 @@
 import FakeHashProvider from '@modules/users/providers/HashProvider/fakes/FakeHashProvider';
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 
 import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
 import User from '@modules/users/infra/typeorm/entities/User';
@@ -9,6 +10,7 @@ import CreateUserService from './CreateUserService';
 
 let fakeUsersRepository: FakeUsersRepository;
 let fakeHashProvider: FakeHashProvider;
+let fakeCacheProvider: FakeCacheProvider;
 
 let authenticateUserService: AuthenticateUserService;
 
@@ -18,6 +20,7 @@ describe('AuthenticateUser', () => {
   beforeEach(() => {
     fakeUsersRepository = new FakeUsersRepository();
     fakeHashProvider = new FakeHashProvider();
+    fakeCacheProvider = new FakeCacheProvider();
 
     authenticateUserService = new AuthenticateUserService(
       fakeUsersRepository,
@@ -27,6 +30,7 @@ describe('AuthenticateUser', () => {
     createUserService = new CreateUserService(
       fakeUsersRepository,
       fakeHashProvider,
+      fakeCacheProvider,
     );
   });
 
