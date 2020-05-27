@@ -1,17 +1,183 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
+import { FiPower, FiClock } from 'react-icons/fi';
+import DayPicker, { DayModifiers } from 'react-day-picker';
+import 'react-day-picker/lib/style.css';
 
 import { useAuth } from '../../hooks/AuthContext';
+import {
+  Container,
+  Header,
+  HeaderContent,
+  Profile,
+  Content,
+  Schedule,
+  Calendar,
+  NextAppointment,
+  Section,
+  Appointment,
+} from './styles';
+
+import logoImg from '../../assets/logo.svg';
 
 const Dashboard: React.FC = () => {
-  const { signOut } = useAuth();
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const { signOut, user } = useAuth();
+
+  const handleDateChange = useCallback((day: Date, modifiers: DayModifiers) => {
+    if (modifiers.available) {
+      setSelectedDate(day);
+    }
+  }, []);
 
   return (
-    <>
-      <h1>Dashboard</h1>
-      <button type="button" onClick={() => signOut()}>
-        Logout
-      </button>
-    </>
+    <Container>
+      <Header>
+        <HeaderContent>
+          <img src={logoImg} alt="GoBarber" />
+
+          <Profile>
+            <img src={user.avatar_url} alt={user.name} />
+
+            <div>
+              <span>Bem-Vindo</span>
+              <strong>{user.name}</strong>
+            </div>
+          </Profile>
+
+          <button type="button" onClick={signOut}>
+            <FiPower />
+          </button>
+        </HeaderContent>
+      </Header>
+
+      <Content>
+        <Schedule>
+          <h1>Horários agendados</h1>
+          <p>
+            <span>Hoje</span>
+            <span>Dia 06</span>
+            <span>Segunda-feira</span>
+          </p>
+
+          <NextAppointment>
+            <strong>Atendimento a seguir</strong>
+
+            <div>
+              <img
+                src="https://avatars3.githubusercontent.com/u/18427800?s=460&u=47d8d2b58794a95ca617fdcd4c5a1bf165c35c5d&v=4"
+                alt="Bernardo Costa"
+              />
+
+              <strong>Bernardo Costa</strong>
+              <span>
+                <FiClock />
+                08:00
+              </span>
+            </div>
+          </NextAppointment>
+
+          <Section>
+            <strong>Manhã</strong>
+
+            <Appointment>
+              <span>
+                <FiClock />
+                08:00
+              </span>
+
+              <div>
+                <img
+                  src="https://avatars3.githubusercontent.com/u/18427800?s=460&u=47d8d2b58794a95ca617fdcd4c5a1bf165c35c5d&v=4"
+                  alt="Bernardo Costa"
+                />
+
+                <strong>Bernardo Costa</strong>
+              </div>
+            </Appointment>
+
+            <Appointment>
+              <span>
+                <FiClock />
+                08:00
+              </span>
+
+              <div>
+                <img
+                  src="https://avatars3.githubusercontent.com/u/18427800?s=460&u=47d8d2b58794a95ca617fdcd4c5a1bf165c35c5d&v=4"
+                  alt="Bernardo Costa"
+                />
+
+                <strong>Bernardo Costa</strong>
+              </div>
+            </Appointment>
+          </Section>
+
+          <Section>
+            <strong>Tarde</strong>
+
+            <Appointment>
+              <span>
+                <FiClock />
+                08:00
+              </span>
+
+              <div>
+                <img
+                  src="https://avatars3.githubusercontent.com/u/18427800?s=460&u=47d8d2b58794a95ca617fdcd4c5a1bf165c35c5d&v=4"
+                  alt="Bernardo Costa"
+                />
+
+                <strong>Bernardo Costa</strong>
+              </div>
+            </Appointment>
+
+            <Appointment>
+              <span>
+                <FiClock />
+                08:00
+              </span>
+
+              <div>
+                <img
+                  src="https://avatars3.githubusercontent.com/u/18427800?s=460&u=47d8d2b58794a95ca617fdcd4c5a1bf165c35c5d&v=4"
+                  alt="Bernardo Costa"
+                />
+
+                <strong>Bernardo Costa</strong>
+              </div>
+            </Appointment>
+          </Section>
+        </Schedule>
+
+        <Calendar>
+          <DayPicker
+            weekdaysShort={['D', 'S', 'T', 'Q', 'Q', 'S', 'S']}
+            fromMonth={new Date()}
+            disabledDays={[{ daysOfWeek: [0, 6] }]}
+            selectedDays={selectedDate}
+            modifiers={{
+              available: { daysOfWeek: [1, 2, 3, 4, 5] },
+            }}
+            onDayClick={handleDateChange}
+            months={[
+              'Janeiro',
+              'Fevereiro',
+              'Março',
+              'Abril',
+              'Maio',
+              'Junho',
+              'Julho',
+              'Agosto',
+              'Setembro',
+              'Outubro',
+              'Novembro',
+              'Dezembro',
+            ]}
+          />
+        </Calendar>
+      </Content>
+    </Container>
   );
 };
 
