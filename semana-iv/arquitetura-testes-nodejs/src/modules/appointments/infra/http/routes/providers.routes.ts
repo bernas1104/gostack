@@ -16,7 +16,7 @@ providersRouter.use(ensureAuthenticated);
 
 providersRouter.get('/', providersController.show);
 providersRouter.get(
-  '/:provider_id/month-availability',
+  '/:provider_id/day-availability',
   celebrate({
     [Segments.PARAMS]: {
       provider_id: Joi.string().uuid().required(),
@@ -25,7 +25,7 @@ providersRouter.get(
   providerDayAvailabilitiesController.index,
 );
 providersRouter.get(
-  '/:provider_id/day-availability',
+  '/:provider_id/month-availability',
   celebrate({
     [Segments.PARAMS]: {
       provider_id: Joi.string().uuid().required(),
